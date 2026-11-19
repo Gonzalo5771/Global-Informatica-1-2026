@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() 
+{
+	int numero;
+	
+	scanf("%d", &numero);
+	
+	printf("%d", numero);
+} 
+
+
+
