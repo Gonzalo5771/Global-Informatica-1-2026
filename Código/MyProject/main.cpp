@@ -90,7 +90,7 @@ int main ()
 			
 				break;
 				
-			case 5: //Salir
+			case 5: //Salir del programa
 				
 				break;
 		
