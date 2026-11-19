@@ -3,8 +3,9 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-//Prototipos
+//Prototipos funcs.
 void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
+void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
 bool es_numerico(char string[]);
 
 int main ()
@@ -173,6 +174,24 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 	}
 	
 
+}
+
+void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
+{
+	char dias_semana[5][10]={"LUNES","MARTES","MIERCOLES","JUEVES","VIERNES"};
+	
+	for(int i=0; i<9; i++)
+	{
+		int num_kit = i+1;
+		printf("\n--------------------KIT %d--------------------\n", i+1);
+		printf("Nombre: %s    Codigo: %s \n",Nombres_kits[i], Codigos_kits[i]);
+		printf("Disponibilidad:\n");
+		printf("Unidades totales: %d\n");
+		for(int j=0;j<4;j++)
+		{
+			printf("%s:  Prestamos: %d    Disponibilidad: %d" dias_semana, Prestados_kits[i][j], (Unidades_kits[i]-Prestados_kits[i][j]));
+		}
+	}
 }
 
 bool es_numerico(char string[8])
