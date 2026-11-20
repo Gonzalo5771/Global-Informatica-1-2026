@@ -6,6 +6,9 @@
 //Prototipos funcs.
 void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
 void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
+
+//Prototipos funcs. auxiliares.
+bool repetido(char codigo[8], char Codigos_kits[][8]);
 bool es_numerico(char string[]);
 
 	//Funcion para DEBUG. Creada por IA. https://share.gemini.google/GieD2gmICYnd
@@ -140,9 +143,9 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 		printf("\nIngrese el codigo del kit %d (Max. 8 digitos numericos): ", num_kit);
 		scanf("%s", codigo_intermedio);
 		
-		while (strlen(codigo_intermedio)>8 || es_numerico(codigo_intermedio)==false)
+		while (strlen(codigo_intermedio)>8 || es_numerico(codigo_intermedio)==false || repetido(codigo_intermedio, Codigos_kits)==true)
 		{
-			printf("ERROR: Ingrese un codigo valido de entre 1 y 8 digitos numéricos: ");
+			printf("ERROR: Ingrese un codigo valido de entre 1 y 8 digitos numéricos sin repetirse con otro kit: ");
 			scanf("%s", codigo_intermedio);
 		}
 
@@ -301,6 +304,35 @@ void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30
 	}
 }
 
+//void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
+//{
+//	char codigo[8];
+//	
+//	printf("Ingrese el codigo del kit que desea consultar: ");
+//	scanf("%s", &codigo);
+//		
+//	
+//}
+
+bool repetido(char codigo[8], char Codigos_kits[][8])
+{
+	int a;
+	bool result=false;
+	
+	for(int i=0;i<10;i++)
+	{
+		a = strcmp(Codigos_kits[i], codigo);
+		
+		if(a==0)
+		{
+			result = true;
+		}
+	}
+	
+	return result;
+}
+	
+
 bool es_numerico(char string[8])
 {
 	int verificados = 0;
@@ -355,5 +387,6 @@ void cargar_datos_debug(char Codigos_kits[][8], char Nombres_kits[][30], int Uni
 	fclose(archivo);
 	printf("\n-DEBUG: Se cargaron %d kits desde 'variables_debug.txt'.\n", i);
 }
+
 
 
