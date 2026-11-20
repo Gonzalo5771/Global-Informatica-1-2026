@@ -61,10 +61,10 @@ int main ()
 	
 	
 	// Datos Kits
-	char Nombres_kits[10][30];
-	char Codigos_kits[10][8];
-	int Unidades_kits[10];
-	int Prestados_kits[10][5];
+	char Nombres_kits[10][30]= {NULL};
+	char Codigos_kits[10][8]= {NULL};
+	int Unidades_kits[10]= {NULL};
+	int Prestados_kits[10][5]= {NULL};
 	
 	cargar_datos_debug(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
 	
@@ -116,8 +116,13 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 	char dias_semana[5][10]={"LUNES","MARTES","MIERCOLES","JUEVES","VIERNES"};
 	char nombre_auxiliar[30];
 	
-//	int num_intermedio;
+	//Variables intermediarias que permiten "arrepentirse" se hacer una carga de datos y conservar el vlaor anterior.
+	char codigo_intermedio[8];
+	char nombre_intermedio[30];
+	int unidades_intermedio;
+	int prestados_intermedio;
 	
+	char op;
 	
 	printf("\n-DEBUG: CARGAR_DATOS\n");
 	
@@ -133,12 +138,33 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 		
 		//Ingreso CÓDIGO
 		printf("\nIngrese el codigo del kit %d (Max. 8 digitos numericos): ", num_kit);
-		scanf("%s", Codigos_kits[i]);
+		scanf("%s", codigo_intermedio);
 		
-		while (strlen(Codigos_kits[i])>8 || es_numerico(Codigos_kits[i])==false)
+		while (strlen(codigo_intermedio)>8 || es_numerico(codigo_intermedio)==false)
 		{
 			printf("ERROR: Ingrese un codigo valido de entre 1 y 8 digitos numéricos: ");
-			scanf("%s", Codigos_kits[i]);
+			scanf("%s", codigo_intermedio);
+		}
+
+		//Verificar si hay valores anteriores y guardar (o no)
+		if(Codigos_kits[i][0] == '\0')
+		{
+			strcpy(Codigos_kits[i], codigo_intermedio);
+		}
+		else if(Codigos_kits[i][0] != '\0')
+		{
+			printf("El kit %d ya tiene un código asignado (%s), desea sobre escribirlo? s/n", num_kit, Codigos_kits[i]);
+			
+			do
+			{
+				scanf("%c", &op);
+			}
+			while(op != 's' && op != 'n');
+			
+			if(op=='s')
+			{
+				strcpy(Codigos_kits[i], codigo_intermedio);
+			}
 		}
 		printf("-DEBUG: EL NÚMERO INGRESADO ES %s", Codigos_kits[i]);//DEBUG
 		
@@ -146,46 +172,67 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 		//Ingreso NOMBRE
 		printf("\nIngrese el nombre del kit %d: ", num_kit);
 		scanf("%c", &nombre_auxiliar);
-		gets(Nombres_kits[i]);
-		strncat(nombre_auxiliar, Nombres_kits[i], 30);
+		gets(nombre_intermedio);
+		strncat(nombre_auxiliar, nombre_intermedio, 30);
 
 		while (strlen(Nombres_kits[i])>30)
 		{
 			printf("ERROR: Ingrese un nombre valido de entre 1 y 30 caracteres alfanumericos: ");
 			scanf("%c", &nombre_auxiliar);
-			gets(Nombres_kits[i]);
-			strncat(nombre_auxiliar, Nombres_kits[i], 30);	
+			gets(nombre_intermedio);
+			strncat(nombre_auxiliar, nombre_intermedio, 30);	
+		}
+		
+		//Verificar si hay valores anteriores y guardar (o no)
+		if(Nombres_kits[i][0] == '\0')
+		{
+			strcpy(Nombres_kits[i], nombre_intermedio);
+		}
+		else if(Nombres_kits[i][0] != '\0')
+		{
+			printf("El kit %d ya tiene un código asignado (%s), desea sobre escribirlo? s/n", num_kit, Nombres_kits[i]);
+			
+			do
+			{
+				scanf("%c", &op);
+			}
+			while(op != 's' && op != 'n');
+			
+			if(op=='s')
+			{
+				strcpy(Nombres_kits[i], nombre_intermedio);
+			}
 		}
 		printf("\n-DEBUG: NOMBRE INGRESADO ES %s", Nombres_kits[i]);//DEBUG
 		
 		
-		//ingreso UNIDADES
-		printf("\nIngrese las unidades totales del kit %d: ", num_kit);
-		scanf("%d", &Unidades_kits[i]);
-		
-		while(Unidades_kits[i]<1||Unidades_kits[i]>20)
-		{
-			printf("ERROR: Ingrese una valor de unidades valida de entre 1 y 20: ");
-			scanf("%d", &Unidades_kits[i]);
-		}
-		printf("\n-DEBUG: UNIDADES INGRESADAS ES %d", Unidades_kits[i]);//DEBUG
-		
-		
-		//Ingreso PRESTAMOS
-		printf("\nA continuacion, ingresara las unidades prestadas del kit %d para cada dia de la semana", num_kit);
-		
-		for(int j=0; j<5; j++)
-		{
-			printf("\n%s: ", dias_semana[j]);
-			scanf("%d", &Prestados_kits[i][j]);
-			
-			while (Prestados_kits[i][j]>Unidades_kits[i])
-			{
-				printf("ERROR: Ingrese una valor de unidades prestadas valida de entre 1 y %d: ", Unidades_kits[i]);
-				scanf("%d", &Prestados_kits[i][j]);
-			}
-			printf("\n-DEBUG: UNIDADES PRESTADAS INGRESADAS %s ES %d", dias_semana[j], Prestados_kits[i][j]);//DEBUG
-		}
+//		//ingreso UNIDADES
+//		printf("\nIngrese las unidades totales del kit %d: ", num_kit);
+//		scanf("%d", &Unidades_kits[i]);
+//		
+//		while(Unidades_kits[i]<1||Unidades_kits[i]>20)
+//		{
+//			printf("ERROR: Ingrese una valor de unidades valida de entre 1 y 20: ");
+//			scanf("%d", &Unidades_kits[i]);
+//		}
+//		printf("\n-DEBUG: UNIDADES INGRESADAS ES %d", Unidades_kits[i]);//DEBUG
+//		
+//		
+//		//Ingreso PRESTAMOS
+//		printf("\nA continuacion, ingresara las unidades prestadas del kit %d para cada dia de la semana", num_kit);
+//		
+//		for(int j=0; j<5; j++)
+//		{
+//			printf("\n%s: ", dias_semana[j]);
+//			scanf("%d", &Prestados_kits[i][j]);
+//			
+//			while (Prestados_kits[i][j]>Unidades_kits[i])
+//			{
+//				printf("ERROR: Ingrese una valor de unidades prestadas valida de entre 1 y %d: ", Unidades_kits[i]);
+//				scanf("%d", &Prestados_kits[i][j]);
+//			}
+//			printf("\n-DEBUG: UNIDADES PRESTADAS INGRESADAS %s ES %d", dias_semana[j], Prestados_kits[i][j]);//DEBUG
+//		}
 		
 	}
 	
