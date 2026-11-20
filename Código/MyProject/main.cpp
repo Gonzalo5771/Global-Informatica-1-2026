@@ -22,51 +22,7 @@ int main ()
 {
 	//Opción menú ppal.
 	int op;
-	
-//	//Códigos kits
-//	
-//	int Cod_kit_1;
-//	int Cod_kit_2;
-//	int Cod_kit_3;	
-//	int Cod_kit_4;
-//	int Cod_kit_5;	
-//	int Cod_kit_6;	
-//	int Cod_kit_7;	
-//	int Cod_kit_8;	
-//	int Cod_kit_9;
-//	int Cod_kit_10;
-	
-	
-	
-//	//Unidades kits
-//	
-//	int Unit_kit_1[];
-//	int Unit_kit_2[20];
-//	int Unit_kit_3[20];	
-//	int Unit_kit_4[20];
-//	int Unit_kit_5[20];	
-//	int Unit_kit_6[20];	
-//	int Unit_kit_7[20];	
-//	int Unit_kit_8[20];	
-//	int Unit_kit_9[20];
-//	int Unit_kit_10[20];
 
-	
-	
-//	//Unidades prestadas cada día de la semana.
-//	
-//	int Prest_kit_1[5];
-//	int Prest_kit_2[5];
-//	int Prest_kit_3[5];	
-//	int Prest_kit_4[5];
-//	int Prest_kit_5[5];	
-//	int Prest_kit_6[5];	
-//	int Prest_kit_7[5];	
-//	int Prest_kit_8[5];	
-//	int Prest_kit_9[5];
-//	int Prest_kit_10[5];	
-	
-	
 	// Datos Kits
 	char Nombres_kits[10][30]= {NULL};
 	char Codigos_kits[10][8]= {NULL};
