@@ -18,8 +18,11 @@ current_source=main.cpp
 path_char=\
 [source]
 path=main.cpp
-cursor=55:21
+cursor=96:2
 open=true
+[other]
+path=Pruebas
+cursor=14:0
 [config]
 name=Debug
 toolchain=

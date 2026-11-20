@@ -8,6 +8,9 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_
 void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
 bool es_numerico(char string[]);
 
+	//Funcion para DEBUG. Creada por IA. https://share.gemini.google/GieD2gmICYnd
+	void cargar_datos_debug(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
+
 int main ()
 {
 	//Opción menú ppal.
@@ -63,11 +66,16 @@ int main ()
 	int Unidades_kits[10];
 	int Prestados_kits[10][5];
 	
+	cargar_datos_debug(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
+	
 	while (op != 5)
 	{
+		printf("\n----------------------------------------------\n");
 		printf("Elija que desea hacer:\n1-Cargar datos\n2-Ver prestamos y disponibilidad\n3-Ver disponibilidad de un kit\n4-Ver estadisticas\n");
-		
+
 		scanf("%d", &op);
+		
+		printf("\n----------------------------------------------\n");
 
 		switch(op)
 		{
@@ -81,6 +89,8 @@ int main ()
 			
 			case 2: //Ver prestamos y disponibilidad
 			
+				ver_prestamos_disponibilidad(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
+				
 				break;
 			
 			case 3: //Ver disponibilidad de un kit
@@ -106,14 +116,20 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 	char dias_semana[5][10]={"LUNES","MARTES","MIERCOLES","JUEVES","VIERNES"};
 	char nombre_auxiliar[30];
 	
+//	int num_intermedio;
+	
+	
 	printf("\n-DEBUG: CARGAR_DATOS\n");
 	
 	printf("Ingrese los datos que se le soliciten. Presione enter si prefiere no modificar un dato");
 	
-	for(int i=0; i<9; i++)
+	for(int i=0; i<10; i++)
 	{
+		if(Codigos_kits[i] == NULL);
+		
 		int num_kit = i+1;
-		printf("\n--------------------KIT %d--------------------\n", i+1);
+		
+		printf("\n--------------------KIT %d--------------------\n", num_kit);
 		
 		//Ingreso CÓDIGO
 		printf("\nIngrese el codigo del kit %d (Max. 8 digitos numericos): ", num_kit);
@@ -158,7 +174,7 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 		//Ingreso PRESTAMOS
 		printf("\nA continuacion, ingresara las unidades prestadas del kit %d para cada dia de la semana", num_kit);
 		
-		for(int j=0; j<4; j++)
+		for(int j=0; j<5; j++)
 		{
 			printf("\n%s: ", dias_semana[j]);
 			scanf("%d", &Prestados_kits[i][j]);
@@ -180,16 +196,16 @@ void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30
 {
 	char dias_semana[5][10]={"LUNES","MARTES","MIERCOLES","JUEVES","VIERNES"};
 	
-	for(int i=0; i<9; i++)
+	for(int i=0; i<10; i++)
 	{
 		int num_kit = i+1;
-		printf("\n--------------------KIT %d--------------------\n", i+1);
-		printf("Nombre: %s    Codigo: %s \n",Nombres_kits[i], Codigos_kits[i]);
-		printf("Disponibilidad:\n");
-		printf("Unidades totales: %d\n");
-		for(int j=0;j<4;j++)
+		printf("\n--------------------KIT %d--------------------\n", num_kit);
+		printf("Nombre: %s    Codigo: %s \n\n",Nombres_kits[i], Codigos_kits[i]);
+		printf("Disponibilidad:\n\n");
+		printf("Unidades totales: %d\n\n", Unidades_kits[i]);
+		for(int j=0;j<5;j++)
 		{
-			printf("%s:  Prestamos: %d    Disponibilidad: %d" dias_semana, Prestados_kits[i][j], (Unidades_kits[i]-Prestados_kits[i][j]));
+			printf("%s:  Prestamos: %d    Disponibilidad: %d\n", dias_semana[j], Prestados_kits[i][j], (Unidades_kits[i]-Prestados_kits[i][j]));
 		}
 	}
 }
@@ -216,6 +232,37 @@ bool es_numerico(char string[8])
 	}
 	
 	return veredicto;
+}
+
+
+//FUNCION PARA CARGAR DATOS DE PRUEBA A PARTIR DE UN .TX. CREADA POR IA SEGÚN SE INDICA EN EL INFORME.
+// https://share.gemini.google/Cnf5ArymnMCT
+void cargar_datos_debug(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5])
+{
+	FILE *archivo = fopen("variables_debug.txt", "r");
+	
+	if (archivo == NULL)
+	{
+		printf("\n-ERROR DEBUG: No se pudo abrir 'variables_debug.txt'.\n");
+		return;
+	}
+	
+	int i = 0;
+	while (i < 10 && fscanf(archivo, " %7[^;];%29[^;];%d;%d;%d;%d;%d;%d",
+							Codigos_kits[i],
+							Nombres_kits[i],
+							&Unidades_kits[i],
+							&Prestados_kits[i][0],
+								&Prestados_kits[i][1],
+									&Prestados_kits[i][2],
+										&Prestados_kits[i][3],
+											&Prestados_kits[i][4]) == 8)
+	{
+		i++;
+	}
+	
+	fclose(archivo);
+	printf("\n-DEBUG: Se cargaron %d kits desde 'variables_debug.txt'.\n", i);
 }
 
 
