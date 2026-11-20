@@ -6,6 +6,7 @@
 //Prototipos funcs.
 void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
 void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
+void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5]);
 
 //Prototipos funcs. auxiliares.
 bool repetido(char codigo[8], char Codigos_kits[][8]);
@@ -13,6 +14,9 @@ bool es_numerico(char string[]);
 
 	//Funcion para DEBUG. Creada por IA. https://share.gemini.google/GieD2gmICYnd
 	void cargar_datos_debug(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
+
+//Declaración de variable global recurrente
+char dias_semana[5][10]={"LUNES","MARTES","MIERCOLES","JUEVES","VIERNES"};
 
 int main ()
 {
@@ -97,7 +101,9 @@ int main ()
 				break;
 			
 			case 3: //Ver disponibilidad de un kit
-			
+				
+				consultar_disponibilidad(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
+				
 				break;
 			
 			case 4: //Ver estadísticas
@@ -116,7 +122,6 @@ int main ()
 
 void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
 {
-	char dias_semana[5][10]={"LUNES","MARTES","MIERCOLES","JUEVES","VIERNES"};
 	char nombre_auxiliar[30];
 	
 	//Variables intermediarias que permiten "arrepentirse" se hacer una carga de datos y conservar el vlaor anterior.
@@ -288,7 +293,6 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 
 void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
 {
-	char dias_semana[5][10]={"LUNES","MARTES","MIERCOLES","JUEVES","VIERNES"};
 	
 	for(int i=0; i<10; i++)
 	{
@@ -304,26 +308,53 @@ void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30
 	}
 }
 
-//void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
-//{
-//	char codigo[8];
-//	
-//	printf("Ingrese el codigo del kit que desea consultar: ");
-//	scanf("%s", &codigo);
-//		
-//	
-//}
+void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
+{
+	char codigo[8];
+	int dia;
+	
+	bool encontrado = false;
+	int ubicacion;
+	
+	
+	printf("Ingrese el codigo del kit que desea consultar: ");
+	scanf("%s", &codigo);
+	
+
+	for(int i=0;i<10;i++)
+	{		
+		if(strcmp(Codigos_kits[i], codigo)==0)
+		{
+			ubicacion=i;
+			i=10;
+			encontrado=true;
+		}
+	}
+	if(encontrado==false)
+	{
+		printf("No se encontró un kit con ese codigo, asegurese de que sea correcto.\n");
+	}
+	
+	printf("Ingrese el día de la semana que quiere consultar:\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
+	scanf("%d", &dia);
+	dia==dia-1;
+	
+	printf("\nNombre: %s    Codigo: %s \n\n",Nombres_kits[ubicacion], Codigos_kits[ubicacion]);
+	printf("Unidades totales: %d\n\n", Unidades_kits[ubicacion]);
+	printf("Prestamos: %d    Disponibilidad: %d\n", Prestados_kits[ubicacion][dia], (Unidades_kits[ubicacion]-Prestados_kits[ubicacion][dia]));
+	
+	printf("\n-DEBUG: ubicacion= %d\n", ubicacion);printf("\n-DEBUG: dia= %d\n", dia);
+	
+	
+}
 
 bool repetido(char codigo[8], char Codigos_kits[][8])
 {
-	int a;
 	bool result=false;
 	
 	for(int i=0;i<10;i++)
 	{
-		a = strcmp(Codigos_kits[i], codigo);
-		
-		if(a==0)
+		if(strcmp(Codigos_kits[i], codigo)==0)
 		{
 			result = true;
 		}
