@@ -614,7 +614,7 @@ void ordenar_mayor_menor(int arreglo_determinante[], char segundo_criterio[][8],
 // https://share.gemini.google/Cnf5ArymnMCT
 void cargar_datos_debug(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5])
 {
-	FILE *archivo = fopen("variables_debug_1.txt", "r");
+	FILE *archivo = fopen("variables_debug_4.txt", "r");
 	
 	if (archivo == NULL)
 	{
