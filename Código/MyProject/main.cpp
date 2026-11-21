@@ -9,6 +9,8 @@ void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30
 void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5]);
 void estadisticas(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5]);
 void mostrar_ranking_utilizacion(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5]);
+void actualizar_prestamo(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5]);
+	
 
 //Prototipos funcs. auxiliares.
 bool repetido(char codigo[8], char Codigos_kits[][8]);
@@ -34,22 +36,18 @@ int main ()
 	
 	cargar_datos_debug(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
 	
-	while (op != 5)
+	while (op != 7)
 	{
 		printf("\n----------------------------------------------\n");
-		printf("Elija que desea hacer:\n1-Cargar datos\n2-Ver prestamos y disponibilidad\n3-Ver disponibilidad de un kit\n4-Ver estadisticas\n5-Ver Ranking Utilizacion\n");
+		printf("Elija que desea hacer:\n1-Cargar datos\n2-Ver prestamos y disponibilidad\n3-Ver disponibilidad de un kit\n4-Ver estadisticas\n5-Ver Ranking Utilizacion\n6-Actualizar Prestamos\n7-SALIR\n");
 
 		scanf("%d", &op);
 		
-		
-
 		switch(op)
 		{
 			case 1: //Carga de datos
 			
 				printf("\n----------------CARGA DE DATOS----------------\n");
-				
-				printf("\n-DEBUG: CASE 1\n");
 			
 				cargar_datos(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
 			
@@ -79,14 +77,21 @@ int main ()
 				
 				break;
 				
-			case 5: //Salir del programa
+			case 5: //Mostrar ranking de utilizacion
 				printf("\n--------------RANKING UTILIZACION--------------\n");
 			
 				mostrar_ranking_utilizacion(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
 				
-			break;
+				break;				
+			
+			case 6: //Actualizar valor de prestamo
+				printf("\n--------------ACTUALIZAR PRESTAMOS--------------\n");
+			
+				actualizar_prestamo(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
 				
-			case 6: //Salir del programa
+				break;			
+				
+			case 7: //Salir del programa
 				
 				break;
 		
@@ -107,8 +112,6 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 	int prestados_intermedio;
 	
 	char op;
-	
-	printf("\n-DEBUG: CARGAR_DATOS\n");
 	
 	printf("Ingrese los datos que se le soliciten. Presione enter si prefiere no modificar un dato");
 	
@@ -150,7 +153,7 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 				strcpy(Codigos_kits[i], codigo_intermedio);
 			}
 		}
-		printf("-DEBUG: EL NÚMERO INGRESADO ES %s", Codigos_kits[i]);//DEBUG
+//		printf("-DEBUG: EL NÚMERO INGRESADO ES %s", Codigos_kits[i]);//DEBUG
 		
 		
 		//Ingreso NOMBRE
@@ -187,14 +190,14 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 				strcpy(Nombres_kits[i], nombre_intermedio);
 			}
 		}
-		printf("\n-DEBUG: NOMBRE INGRESADO ES %s", Nombres_kits[i]);//DEBUG
+//		printf("\n-DEBUG: NOMBRE INGRESADO ES %s", Nombres_kits[i]);//DEBUG
 		
 		
 		//ingreso UNIDADES
 		printf("\nIngrese las unidades totales del kit %d: ", num_kit);
 		scanf("%d", &unidades_intermedio);
 		
-		while(unidades_intermedio<1||unidades_intermedio>20)
+		while(unidades_intermedio<1||Unidades_kits[i]>20)
 		{
 			printf("ERROR: Ingrese una valor de unidades valida de entre 1 y 20: ");
 			scanf("%d", &unidades_intermedio);
@@ -220,7 +223,7 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 				Unidades_kits[i] = unidades_intermedio;
 			}
 		}		
-		printf("\n-DEBUG: UNIDADES INGRESADAS ES %d", Unidades_kits[i]);//DEBUG
+//		printf("\n-DEBUG: UNIDADES INGRESADAS ES %d", Unidades_kits[i]);//DEBUG
 		
 		
 		//Ingreso PRESTAMOS
@@ -257,7 +260,7 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 					Prestados_kits[i][j] = prestados_intermedio;
 				}
 			}					
-			printf("\n-DEBUG: UNIDADES PRESTADAS INGRESADAS %s ES %d", dias_semana[j], Prestados_kits[i][j]);//DEBUG
+//			printf("\n-DEBUG: UNIDADES PRESTADAS INGRESADAS %s ES %d", dias_semana[j], Prestados_kits[i][j]);//DEBUG
 			
 			
 		}
@@ -313,13 +316,19 @@ void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],in
 	
 	printf("Ingrese el día de la semana que quiere consultar:\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
 	scanf("%d", &dia);
-	dia==dia-1;
+	while(dia!=1&&dia!=2&&dia!=3&&dia!=4&&dia!=5)
+	{
+		printf("ERROR: Ingrese un numero valido entre 1 y 5\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
+		scanf("%d", &dia);
+	}
+	
+	dia=dia-1;
 	
 	printf("\nNombre: %s    Codigo: %s \n\n",Nombres_kits[ubicacion], Codigos_kits[ubicacion]);
 	printf("Unidades totales: %d\n\n", Unidades_kits[ubicacion]);
 	printf("Prestamos: %d    Disponibilidad: %d\n", Prestados_kits[ubicacion][dia], (Unidades_kits[ubicacion]-Prestados_kits[ubicacion][dia]));
 	
-	printf("\n-DEBUG: ubicacion= %d\n", ubicacion);printf("\n-DEBUG: dia= %d\n", dia);
+//	printf("\n-DEBUG: ubicacion= %d\n", ubicacion);printf("\n-DEBUG: dia= %d\n", dia);
 	
 	
 }
@@ -421,6 +430,57 @@ void mostrar_ranking_utilizacion(char Codigos_kits[][8], char Nombres_kits[][30]
 		printf("Cod: %s, Nombre: %s     Total prestamos: %d  Porcentaje de utilizacion: %d%\n", Codigos_kits[registro_de_cambio[i]], Nombres_kits[registro_de_cambio[i]], Prestamo_semanal[registro_de_cambio[i]], Utilizacion_semanal[i]);
 	}
 }
+
+void actualizar_prestamo(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
+{
+	char codigo[8];
+	int dia;
+	
+	bool encontrado = false;
+	int ubicacion;
+	
+	
+	printf("Ingrese el codigo del kit que desea actualizar: ");
+	scanf("%s", &codigo);
+	
+	
+	for(int i=0;i<10;i++)
+	{		
+		if(strcmp(Codigos_kits[i], codigo)==0)
+		{
+			ubicacion=i;
+			i=10;
+			encontrado=true;
+		}
+	}
+	if(encontrado==false)
+	{
+		printf("No se encontró un kit con ese codigo, asegurese de que sea correcto.\n");
+	}
+	
+	printf("Ingrese el día de la semana que quiere consultar:\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
+	scanf("%d", &dia);
+	while(dia!=1&&dia!=2&&dia!=3&&dia!=4&&dia!=5)
+	{
+		printf("ERROR: Ingrese un numero valido entre 1 y 5\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
+		scanf("%d", &dia);
+	}
+	dia=dia-1;
+	
+	printf("\nPrestamos registrados: %d\n", Prestados_kits[ubicacion][dia]);
+	
+	printf("Ingrese el nuevo valor de unidades prestadas para el kit %s (%s) del dia %s: ", Codigos_kits[ubicacion], Nombres_kits[ubicacion], dias_semana[dia]);
+	scanf("%d", &Prestados_kits[ubicacion][dia]);
+	
+	while (Prestados_kits[ubicacion][dia]>Unidades_kits[ubicacion])
+	{
+		printf("ERROR: Ingrese una valor de unidades prestadas valida de entre 1 y %d: ", Unidades_kits[ubicacion]);
+		scanf("%d", &Prestados_kits[ubicacion][dia]);
+	}
+	
+//	printf("\n-DEBUG: ubicacion= %d\n", ubicacion);printf("\n-DEBUG: dia= %d\n", dia);
+}
+	
 
 //-----------FUNCIONES AUXILIARES--------------------------------
 bool repetido(char codigo[8], char Codigos_kits[][8])
@@ -534,6 +594,9 @@ void ordenar_mayor_menor(int arreglo_determinante[], char segundo_criterio[][8],
 	}
 	while(terminado == false);
 }
+
+
+
 //FUNCION PARA CARGAR DATOS DE PRUEBA A PARTIR DE UN .TX. CREADA POR IA SEGÚN SE INDICA EN EL INFORME.
 // https://share.gemini.google/Cnf5ArymnMCT
 void cargar_datos_debug(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5])
