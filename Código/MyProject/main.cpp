@@ -117,7 +117,6 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 	
 	for(int i=0; i<10; i++)
 	{
-		if(Codigos_kits[i] == NULL);
 		
 		int num_kit = i+1;
 		
@@ -234,7 +233,7 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 			printf("\n%s: ", dias_semana[j]);
 			scanf("%d", &prestados_intermedio);
 			
-			while (prestados_intermedio>prestados_intermedio)
+			while (prestados_intermedio>Unidades_kits[i])
 			{
 				printf("ERROR: Ingrese una valor de unidades prestadas valida de entre 1 y %d: ", Unidades_kits[i]);
 				scanf("%d", &prestados_intermedio);
