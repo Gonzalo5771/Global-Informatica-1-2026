@@ -3,14 +3,16 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-//Prototipos funcs.
+//Prototipos funcs. ppales.
 void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
 void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
 void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5]);
+void estadisticas(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5]);
 
 //Prototipos funcs. auxiliares.
 bool repetido(char codigo[8], char Codigos_kits[][8]);
 bool es_numerico(char string[]);
+void ordenar_mayor_menor(int arreglo_determinante[], char segundo_criterio[][8], int arreglo_determinado[],int tamano_arreglo);
 
 	//Funcion para DEBUG. Creada por IA. https://share.gemini.google/GieD2gmICYnd
 	void cargar_datos_debug(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
@@ -64,6 +66,8 @@ int main ()
 			
 			case 4: //Ver estadísticas
 			
+				estadisticas(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
+				
 				break;
 				
 			case 5: //Salir del programa
@@ -304,6 +308,78 @@ void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],in
 	
 }
 
+void estadisticas(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
+{
+	int Prestamo_semanal[10];
+	int Utilizacion_semanal[10];
+	int Prestamos_mayor_menor[10][5];
+	int Prestamo_diario[5];
+	int Prestamos_diario_registro_cambio_orden[5]={0,1,2,3,4};
+	
+
+	//Preparación de variables/cálcullo de estadísitcas.
+	for(int i=0;i<10;i++)
+	{
+		Prestamo_semanal[i]=Prestados_kits[i][0]+Prestados_kits[i][1]+Prestados_kits[i][2]+Prestados_kits[i][3]+Prestados_kits[i][4];
+	}
+	for(int i=0;i<10;i++)
+	{
+		Utilizacion_semanal[i]=(Prestamo_semanal[i]*100)/(Unidades_kits[i]*5);
+	}
+	for(int i=0;i<10;i++)
+	{
+		for(int j=0; j<10; j++)
+		{
+			Prestamos_mayor_menor[i][j] = Prestados_kits[i][j];
+		}
+	}
+	for(int i=0;i<5;i++)
+	{
+		Prestamo_diario[i]=Prestados_kits[0][i]+Prestados_kits[1][i]+Prestados_kits[2][i]+Prestados_kits[3][i]+Prestados_kits[4][i];
+	}
+	for(int i=0;i<5;i++)
+	{
+		ordenar_mayor_menor(Prestamo_diario, NULL, Prestamos_diario_registro_cambio_orden, 5);
+	}
+	for(int i=0;i<10;i++)
+	{
+		ordenar_mayor_menor(Prestamos_mayor_menor[i], NULL, NULL, 10);
+	}
+		
+	
+	printf("\n----------------------------------------------\n");
+	
+	printf("\n-----------Total Prestamos Semanales-----------\n");
+	for(int i=0;i<10;i++)
+	{
+		printf("Cod: %s, Nombre: %s     Prestamos semanales: %d\n", Codigos_kits[i], Nombres_kits[i], Prestamo_semanal[i]);
+	}
+	
+	printf("\n--------------Utilizacion Semanal--------------\n");
+	for(int i=0;i<10;i++)
+	{
+		printf("Cod: %s, Nombre: %s     Utilizacion: %d%\n", Codigos_kits[i], Nombres_kits[i], Utilizacion_semanal[i]);
+	}
+	
+	printf("\n---------------Mayor uso Semanal---------------\n");
+	for(int i=0;i<10;i++)
+	{
+		printf("Cod: %s, Nombre: %s     Mayor uso: %d\n", Codigos_kits[i], Nombres_kits[i], Prestamos_mayor_menor[i][0]);
+	}
+	
+	printf("\n---------------Menor uso Semanal---------------\n");
+	for(int i=0;i<10;i++)
+	{
+		printf("Cod: %s, Nombre: %s     Menor uso: %d\n", Codigos_kits[i], Nombres_kits[i], Prestamos_mayor_menor[i][4]);
+	}
+	
+	printf("\n---------Dias con mas prestamos totales---------\n");
+	
+		printf("1- %s: %d\n", dias_semana[Prestamos_diario_registro_cambio_orden[0]], Prestamo_diario[Prestamos_diario_registro_cambio_orden[0]]);
+		printf("2- %s: %d\n", dias_semana[Prestamos_diario_registro_cambio_orden[1]], Prestamo_diario[Prestamos_diario_registro_cambio_orden[1]]);
+		printf("3- %s: %d\n", dias_semana[Prestamos_diario_registro_cambio_orden[2]], Prestamo_diario[Prestamos_diario_registro_cambio_orden[2]]);
+}
+
 bool repetido(char codigo[8], char Codigos_kits[][8])
 {
 	bool result=false;
@@ -344,7 +420,77 @@ bool es_numerico(char string[8])
 	return veredicto;
 }
 
-
+void ordenar_mayor_menor(int arreglo_determinante[], char segundo_criterio[][8], int arreglo_determinado[],int tamano_arreglo)
+{
+	
+	int a;
+	int b;
+	
+	char c[8];
+	char d[8];
+	
+	bool existe_arreglo_determinado=false;
+	bool existe_segundo_criterio=false;
+	
+	bool terminado;
+	
+	if (arreglo_determinado!=NULL)
+	{
+		existe_arreglo_determinado=true;
+	}
+	if(segundo_criterio!=NULL)
+	{
+		existe_segundo_criterio=true;
+	}
+	
+	do
+	{
+		terminado = true;
+		
+		for(int i=0; i<tamano_arreglo-1;i++)
+		{
+			
+			if (arreglo_determinante[i]<arreglo_determinante[i+1])
+			{
+				a = arreglo_determinante[i];
+				b = arreglo_determinante[i+1];
+				arreglo_determinante[i+1] = a;
+				arreglo_determinante[i] = b;
+				
+				terminado = false;
+				
+				if (existe_arreglo_determinado)
+				{
+					a = arreglo_determinado[i];
+					b = arreglo_determinado[i+1];
+					arreglo_determinado[i+1] = a;
+					arreglo_determinado[i] = b;
+				}
+			}
+			else if(existe_segundo_criterio && arreglo_determinante[i]==arreglo_determinante[i+1])
+			{
+				if(strcmp(segundo_criterio[i], segundo_criterio[i+1])>0)
+				{
+					strcpy(c, segundo_criterio[i]);
+					strcpy(d, segundo_criterio[i+1]);
+					strcpy(segundo_criterio[i+1], c);
+					strcpy(segundo_criterio[i], d);
+					
+					terminado = false;
+					
+					if (existe_arreglo_determinado)
+					{
+						a = arreglo_determinado[i];
+						b = arreglo_determinado[i+1];
+						arreglo_determinado[i+1] = a;
+						arreglo_determinado[i] = b;
+					}
+				}
+			}
+		}
+	}
+	while(terminado == false);
+}
 //FUNCION PARA CARGAR DATOS DE PRUEBA A PARTIR DE UN .TX. CREADA POR IA SEGÚN SE INDICA EN EL INFORME.
 // https://share.gemini.google/Cnf5ArymnMCT
 void cargar_datos_debug(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5])
