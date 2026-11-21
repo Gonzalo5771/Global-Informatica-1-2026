@@ -8,6 +8,7 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_
 void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
 void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5]);
 void estadisticas(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5]);
+void mostrar_ranking_utilizacion(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5]);
 
 //Prototipos funcs. auxiliares.
 bool repetido(char codigo[8], char Codigos_kits[][8]);
@@ -36,15 +37,17 @@ int main ()
 	while (op != 5)
 	{
 		printf("\n----------------------------------------------\n");
-		printf("Elija que desea hacer:\n1-Cargar datos\n2-Ver prestamos y disponibilidad\n3-Ver disponibilidad de un kit\n4-Ver estadisticas\n");
+		printf("Elija que desea hacer:\n1-Cargar datos\n2-Ver prestamos y disponibilidad\n3-Ver disponibilidad de un kit\n4-Ver estadisticas\n5-Ver Ranking Utilizacion\n");
 
 		scanf("%d", &op);
 		
-		printf("\n----------------------------------------------\n");
+		
 
 		switch(op)
 		{
 			case 1: //Carga de datos
+			
+				printf("\n----------------CARGA DE DATOS----------------\n");
 				
 				printf("\n-DEBUG: CASE 1\n");
 			
@@ -53,6 +56,8 @@ int main ()
 				break;
 			
 			case 2: //Ver prestamos y disponibilidad
+				
+				printf("\n-----------PRESTAMOS-DISPONIBILIDAD-----------\n");
 			
 				ver_prestamos_disponibilidad(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
 				
@@ -60,17 +65,28 @@ int main ()
 			
 			case 3: //Ver disponibilidad de un kit
 				
+				printf("\n----------CONSULTA DE DISPONIBILIDAD----------\n");
+				
 				consultar_disponibilidad(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
 				
 				break;
 			
 			case 4: //Ver estadísticas
+				
+				printf("\n-----------------ESTADISTICAS-----------------\n");
 			
 				estadisticas(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
 				
 				break;
 				
 			case 5: //Salir del programa
+				printf("\n--------------RANKING UTILIZACION--------------\n");
+			
+				mostrar_ranking_utilizacion(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
+				
+			break;
+				
+			case 6: //Salir del programa
 				
 				break;
 		
@@ -380,6 +396,33 @@ void estadisticas(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 		printf("3- %s: %d\n", dias_semana[Prestamos_diario_registro_cambio_orden[2]], Prestamo_diario[Prestamos_diario_registro_cambio_orden[2]]);
 }
 
+void mostrar_ranking_utilizacion(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
+{
+	int Prestamo_semanal[10];
+	int Utilizacion_semanal[10];
+	int registro_de_cambio[10]={0,1,2,3,4,5,6,7,8,9};
+	
+	//Preparación de variables/cálcullo de estadísitcas.
+	for(int i=0;i<10;i++)
+	{
+		Prestamo_semanal[i]=Prestados_kits[i][0]+Prestados_kits[i][1]+Prestados_kits[i][2]+Prestados_kits[i][3]+Prestados_kits[i][4];
+	}
+	for(int i=0;i<10;i++)
+	{
+		Utilizacion_semanal[i]=(Prestamo_semanal[i]*100)/(Unidades_kits[i]*5);
+	}
+	for(int i=0;i<10;i++)
+	{
+		ordenar_mayor_menor(Utilizacion_semanal, Codigos_kits, registro_de_cambio,10);
+	}	
+	
+	for(int i=0;i<10;i++)
+	{
+		printf("Cod: %s, Nombre: %s     Total prestamos: %d  Porcentaje de utilizacion: %d%\n", Codigos_kits[registro_de_cambio[i]], Nombres_kits[registro_de_cambio[i]], Prestamo_semanal[registro_de_cambio[i]], Utilizacion_semanal[i]);
+	}
+}
+
+//-----------FUNCIONES AUXILIARES--------------------------------
 bool repetido(char codigo[8], char Codigos_kits[][8])
 {
 	bool result=false;
