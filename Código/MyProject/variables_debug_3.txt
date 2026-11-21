@@ -1,0 +1,10 @@
+1001;Kit Minimo 1 Unidad;1;0;0;0;0;0
+1002;Kit Maximo 20 Unidades;20;20;20;20;20;20
+1003;Kit Sin Uso Semanal;15;0;0;0;0;0
+1004;Kit Uso Total Diario;8;8;8;8;8;8
+1005;Kit Solo Lunes;10;10;0;0;0;0
+1006;Kit Solo Viernes;10;0;0;0;0;10
+1007;Kit Mitad de Semana;12;0;0;12;0;0
+1008;Kit Unidad Unica Full;1;1;1;1;1;1
+1009;Kit Casi Vacio;20;1;0;0;0;0
+1010;Kit Casi Lleno;20;20;20;20;20;19

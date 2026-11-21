@@ -1,0 +1,10 @@
+500;Kit Arduino Mega;10;5;5;5;5;5
+100;Kit Sensores IR;4;2;2;2;2;2
+300;Kit Protoboard Grande;2;1;1;1;1;1
+900;Kit Multimetro Fluke;5;4;4;4;4;4
+200;Kit Fuente Regulable;10;8;8;8;8;8
+400;Kit Osciloscopio USB;1;0;0;0;0;0
+800;Kit Generador Senales;10;10;10;10;10;10
+700;Kit Soldador Estacion;8;2;2;2;2;2
+600;Kit Placa ESP8266;6;3;3;3;3;3
+150;Kit Cables Dupont;20;16;16;16;16;16

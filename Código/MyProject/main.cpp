@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 //Prototipos funcs. ppales.
 void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5]);
@@ -310,23 +311,25 @@ void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],in
 	}
 	if(encontrado==false)
 	{
-		printf("No se encontró un kit con ese codigo, asegurese de que sea correcto.\n");
+		printf("No se encontro un kit con ese codigo, asegurese de que sea correcto.\n");
 	}
-	
-	printf("Ingrese el día de la semana que quiere consultar:\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
-	scanf("%d", &dia);
-	while(dia!=1&&dia!=2&&dia!=3&&dia!=4&&dia!=5)
+	else
 	{
-		printf("ERROR: Ingrese un numero valido entre 1 y 5\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
+	
+		printf("Ingrese el día de la semana que quiere consultar:\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
 		scanf("%d", &dia);
+		while(dia!=1&&dia!=2&&dia!=3&&dia!=4&&dia!=5)
+		{
+			printf("ERROR: Ingrese un numero valido entre 1 y 5\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
+			scanf("%d", &dia);
+		}
+	
+		dia=dia-1;
+	
+		printf("\nNombre: %s    Codigo: %s \n\n",Nombres_kits[ubicacion], Codigos_kits[ubicacion]);
+		printf("Unidades totales: %d\n\n", Unidades_kits[ubicacion]);
+		printf("Prestamos: %d    Disponibilidad: %d\n", Prestados_kits[ubicacion][dia], (Unidades_kits[ubicacion]-Prestados_kits[ubicacion][dia]));
 	}
-	
-	dia=dia-1;
-	
-	printf("\nNombre: %s    Codigo: %s \n\n",Nombres_kits[ubicacion], Codigos_kits[ubicacion]);
-	printf("Unidades totales: %d\n\n", Unidades_kits[ubicacion]);
-	printf("Prestamos: %d    Disponibilidad: %d\n", Prestados_kits[ubicacion][dia], (Unidades_kits[ubicacion]-Prestados_kits[ubicacion][dia]));
-	
 //	printf("\n-DEBUG: ubicacion= %d\n", ubicacion);printf("\n-DEBUG: dia= %d\n", dia);
 	
 	
@@ -361,17 +364,13 @@ void estadisticas(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 	{
 		Prestamo_diario[i]=Prestados_kits[0][i]+Prestados_kits[1][i]+Prestados_kits[2][i]+Prestados_kits[3][i]+Prestados_kits[4][i];
 	}
-	for(int i=0;i<5;i++)
-	{
+
 		ordenar_mayor_menor(Prestamo_diario, NULL, Prestamos_diario_registro_cambio_orden, 5);
-	}
+	
 	for(int i=0;i<10;i++)
 	{
-		ordenar_mayor_menor(Prestamos_mayor_menor[i], NULL, NULL, 10);
+		ordenar_mayor_menor(Prestamos_mayor_menor[i], NULL, NULL, 5);
 	}
-		
-	
-	printf("\n----------------------------------------------\n");
 	
 	printf("\n-----------Total Prestamos Semanales-----------\n");
 	for(int i=0;i<10;i++)
@@ -528,6 +527,8 @@ void ordenar_mayor_menor(int arreglo_determinante[], char segundo_criterio[][8],
 	int a;
 	int b;
 	
+	char copia_segundo_criterio[tamano_arreglo][8];
+	
 	char c[8];
 	char d[8];
 	
@@ -543,6 +544,10 @@ void ordenar_mayor_menor(int arreglo_determinante[], char segundo_criterio[][8],
 	if(segundo_criterio!=NULL)
 	{
 		existe_segundo_criterio=true;
+		for(int i=0;i<tamano_arreglo;i++)
+		{
+			strcpy(copia_segundo_criterio[i], segundo_criterio[i]);
+		}
 	}
 	
 	do
@@ -561,6 +566,14 @@ void ordenar_mayor_menor(int arreglo_determinante[], char segundo_criterio[][8],
 				
 				terminado = false;
 				
+				if (existe_segundo_criterio)
+				{
+					strcpy(c, copia_segundo_criterio[i+1]);
+					strcpy(d, copia_segundo_criterio[i]);
+					strcpy(copia_segundo_criterio[i], c);
+					strcpy(copia_segundo_criterio[i+1], d);
+				}
+				
 				if (existe_arreglo_determinado)
 				{
 					a = arreglo_determinado[i];
@@ -571,21 +584,22 @@ void ordenar_mayor_menor(int arreglo_determinante[], char segundo_criterio[][8],
 			}
 			else if(existe_segundo_criterio && arreglo_determinante[i]==arreglo_determinante[i+1])
 			{
-				if(strcmp(segundo_criterio[i], segundo_criterio[i+1])>0)
+				if(strtol(copia_segundo_criterio[i], NULL, 10)>strtol(copia_segundo_criterio[i+1], NULL, 10))
 				{
-					strcpy(c, segundo_criterio[i]);
-					strcpy(d, segundo_criterio[i+1]);
-					strcpy(segundo_criterio[i+1], c);
-					strcpy(segundo_criterio[i], d);
+					strcpy(c, copia_segundo_criterio[i+1]);
+					strcpy(d, copia_segundo_criterio[i]);
+					strcpy(copia_segundo_criterio[i], c);
+					strcpy(copia_segundo_criterio[i+1], d);
 					
 					terminado = false;
 					
 					if (existe_arreglo_determinado)
 					{
-						a = arreglo_determinado[i];
-						b = arreglo_determinado[i+1];
-						arreglo_determinado[i+1] = a;
-						arreglo_determinado[i] = b;
+						
+						a = arreglo_determinado[i+1];
+						b = arreglo_determinado[i];
+						arreglo_determinado[i] = a;
+						arreglo_determinado[i+1] = b;
 					}
 				}
 			}
@@ -600,7 +614,7 @@ void ordenar_mayor_menor(int arreglo_determinante[], char segundo_criterio[][8],
 // https://share.gemini.google/Cnf5ArymnMCT
 void cargar_datos_debug(char Codigos_kits[][8], char Nombres_kits[][30], int Unidades_kits[], int Prestados_kits[][5])
 {
-	FILE *archivo = fopen("variables_debug.txt", "r");
+	FILE *archivo = fopen("variables_debug_1.txt", "r");
 	
 	if (archivo == NULL)
 	{
