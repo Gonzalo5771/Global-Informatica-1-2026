@@ -37,7 +37,7 @@ int main ()
 	int Prestados_kits[10][5]= {NULL};
 
 	
-//	cargar_datos_debug(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
+//	cargar_datos_debug(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);     //FUNCIÓ HECH APOR IA QUE CARGA DATOS DE PRUEBA
 	
 	while (terminar==false)
 	{
@@ -120,7 +120,7 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 	
 	printf("Ingrese los datos que se le soliciten. Presione enter si prefiere no modificar un dato");
 	
-	for(int i=0; i<10; i++)
+	for(int i=0; i<2; i++)
 	{
 		
 		int num_kit = i+1;
@@ -163,14 +163,14 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 		//Ingreso NOMBRE
 		printf("\nIngrese el nombre del kit %d: ", num_kit);
 		scanf("%c", &nombre_auxiliar);
-		gets(nombre_intermedio);
+		fgets(nombre_intermedio, 30, stdin);
 		strncat(nombre_auxiliar, nombre_intermedio, 30);
 
 		while (strlen(nombre_intermedio)>30)
 		{
 			printf("ERROR: Ingrese un nombre valido de entre 1 y 30 caracteres alfanumericos: ");
 			scanf("%c", &nombre_auxiliar);
-			gets(nombre_intermedio);
+			fgets(nombre_intermedio, 30, stdin);
 			strncat(nombre_auxiliar, nombre_intermedio, 30);	
 		}
 		
@@ -201,18 +201,18 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 		printf("\nIngrese las unidades totales del kit %d: ", num_kit);
 		scanf("%d", &unidades_intermedio);
 		
-		while(unidades_intermedio<1||Unidades_kits[i]>20)
+		while(unidades_intermedio<1||unidades_intermedio>20)
 		{
 			printf("ERROR: Ingrese una valor de unidades valida de entre 1 y 20: ");
 			scanf("%d", &unidades_intermedio);
 		}
 		
 		//Verificar si hay valores anteriores y guardar (o no)
-		if(Unidades_kits[0] == '\0')
+		if(Unidades_kits[i] == NULL)
 		{
 			Unidades_kits[i] = unidades_intermedio;
 		}
-		else if(Unidades_kits[0] != '\0')
+		else if(Unidades_kits[i] != NULL)
 		{
 			printf("ADVERTENCIA: El kit %d ya tiene unidades asignadas (%d), desea sobre escribirlo? s/n ", num_kit, Unidades_kits[i]);
 			
