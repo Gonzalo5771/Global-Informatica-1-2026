@@ -162,7 +162,7 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 		gets(nombre_intermedio);
 		strncat(nombre_auxiliar, nombre_intermedio, 30);
 
-		while (strlen(Nombres_kits[i])>30)
+		while (strlen(nombre_intermedio)>30)
 		{
 			printf("ERROR: Ingrese un nombre valido de entre 1 y 30 caracteres alfanumericos: ");
 			scanf("%c", &nombre_auxiliar);
@@ -206,7 +206,7 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 		//Verificar si hay valores anteriores y guardar (o no)
 		if(Unidades_kits[0] == '\0')
 		{
-			Unidades_kits[i] = unidades_intermedio;;
+			Unidades_kits[i] = unidades_intermedio;
 		}
 		else if(Unidades_kits[0] != '\0')
 		{
