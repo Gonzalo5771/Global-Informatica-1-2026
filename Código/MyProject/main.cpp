@@ -37,7 +37,7 @@ int main ()
 	int Prestados_kits[10][5]= {NULL};
 
 	
-	cargar_datos_debug(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
+//	cargar_datos_debug(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
 	
 	while (terminar==false)
 	{
@@ -278,17 +278,25 @@ void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30
 {
 	int num_kit;
 	
-	for(int i=0; i<10; i++)
+	if(Codigos_kits[0][0]!='\0')
 	{
-		num_kit = i+1;
-		printf("\n--------------------KIT %d--------------------\n", num_kit);
-		printf("Nombre: %s    Codigo: %s \n\n",Nombres_kits[i], Codigos_kits[i]);
-		printf("Disponibilidad:\n\n");
-		printf("Unidades totales: %d\n\n", Unidades_kits[i]);
-		for(int j=0;j<5;j++)
+	
+		for(int i=0; i<10; i++)
 		{
-			printf("%s:  Prestamos: %d    Disponibilidad: %d\n", dias_semana[j], Prestados_kits[i][j], (Unidades_kits[i]-Prestados_kits[i][j]));
+			num_kit = i+1;
+			printf("\n--------------------KIT %d--------------------\n", num_kit);
+			printf("Nombre: %s    Codigo: %s \n\n",Nombres_kits[i], Codigos_kits[i]);
+			printf("Disponibilidad:\n\n");
+			printf("Unidades totales: %d\n\n", Unidades_kits[i]);
+			for(int j=0;j<5;j++)
+			{
+				printf("%s:  Prestamos: %d    Disponibilidad: %d\n", dias_semana[j], Prestados_kits[i][j], (Unidades_kits[i]-Prestados_kits[i][j]));
+			}
 		}
+	}
+	else
+	{
+		printf("No hay datos ingresados.");
 	}
 }
 
@@ -316,7 +324,7 @@ void consultar_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],in
 	}
 	if(encontrado==false)
 	{
-		printf("No se encontro un kit con ese codigo, asegurese de que sea correcto.\n");
+		printf("ERROR: No se encontro un kit con ese codigo, asegurese de que sea correcto.\n");
 	}
 	else
 	{
@@ -348,7 +356,8 @@ void estadisticas(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 	int Prestamo_diario[5];
 	int Prestamos_diario_registro_cambio_orden[5]={0,1,2,3,4};
 	
-
+ if(Codigos_kits[0][0]!='\0')
+ {
 	//Preparación de variables/cálcullo de estadísitcas.
 	for(int i=0;i<10;i++)
 	{
@@ -406,6 +415,11 @@ void estadisticas(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 		printf("1- %s: %d\n", dias_semana[Prestamos_diario_registro_cambio_orden[0]], Prestamo_diario[Prestamos_diario_registro_cambio_orden[0]]);
 		printf("2- %s: %d\n", dias_semana[Prestamos_diario_registro_cambio_orden[1]], Prestamo_diario[Prestamos_diario_registro_cambio_orden[1]]);
 		printf("3- %s: %d\n", dias_semana[Prestamos_diario_registro_cambio_orden[2]], Prestamo_diario[Prestamos_diario_registro_cambio_orden[2]]);
+ }
+ else
+ {
+	 printf("No hay datos ingresados.");
+ }
 }
 
 void mostrar_ranking_utilizacion(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
@@ -414,23 +428,32 @@ void mostrar_ranking_utilizacion(char Codigos_kits[][8], char Nombres_kits[][30]
 	int Utilizacion_semanal[10];
 	int registro_de_cambio[10]={0,1,2,3,4,5,6,7,8,9};
 	
-	//Preparación de variables/cálcullo de estadísitcas.
-	for(int i=0;i<10;i++)
+	if(Codigos_kits[0][0]!='\0')
 	{
-		Prestamo_semanal[i]=Prestados_kits[i][0]+Prestados_kits[i][1]+Prestados_kits[i][2]+Prestados_kits[i][3]+Prestados_kits[i][4];
-	}
-	for(int i=0;i<10;i++)
-	{
-		Utilizacion_semanal[i]=(Prestamo_semanal[i]*100)/(Unidades_kits[i]*5);
-	}
-	for(int i=0;i<10;i++)
-	{
-		ordenar_mayor_menor(Utilizacion_semanal, Codigos_kits, registro_de_cambio,10);
-	}	
 	
-	for(int i=0;i<10;i++)
+		//Preparación de variables/cálcullo de estadísitcas.
+		for(int i=0;i<10;i++)
+		{
+			Prestamo_semanal[i]=Prestados_kits[i][0]+Prestados_kits[i][1]+Prestados_kits[i][2]+Prestados_kits[i][3]+Prestados_kits[i][4];
+		}
+		for(int i=0;i<10;i++)
+		{
+			Utilizacion_semanal[i]=(Prestamo_semanal[i]*100)/(Unidades_kits[i]*5);
+		}
+		for(int i=0;i<10;i++)
+		{
+			ordenar_mayor_menor(Utilizacion_semanal, Codigos_kits, registro_de_cambio,10);
+		}	
+		
+		for(int i=0;i<10;i++)
+		{
+			printf("Cod: %s, Nombre: %s     Total prestamos: %d  Porcentaje de utilizacion: %d%\n", Codigos_kits[registro_de_cambio[i]], Nombres_kits[registro_de_cambio[i]], Prestamo_semanal[registro_de_cambio[i]], Utilizacion_semanal[i]);
+		}
+		
+	}
+	else
 	{
-		printf("Cod: %s, Nombre: %s     Total prestamos: %d  Porcentaje de utilizacion: %d%\n", Codigos_kits[registro_de_cambio[i]], Nombres_kits[registro_de_cambio[i]], Prestamo_semanal[registro_de_cambio[i]], Utilizacion_semanal[i]);
+		printf("No hay datos ingresados.");
 	}
 }
 
@@ -458,7 +481,7 @@ void actualizar_prestamo(char Codigos_kits[][8], char Nombres_kits[][30],int Uni
 	}
 	if(encontrado==false)
 	{
-		printf("No se encontró un kit con ese codigo, asegurese de que sea correcto.\n");
+		printf("ERROR: No se encontro un kit con ese codigo, asegurese de que sea correcto.\n");
 	}
 	else
 	{
