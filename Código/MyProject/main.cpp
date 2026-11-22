@@ -28,19 +28,21 @@ int main ()
 {
 	//Opción menú ppal.
 	int op;
+	bool terminar=false;
 
 	// Datos Kits
 	char Nombres_kits[10][30]= {NULL};
 	char Codigos_kits[10][8]= {NULL};
 	int Unidades_kits[10]= {NULL};
 	int Prestados_kits[10][5]= {NULL};
+
 	
 	cargar_datos_debug(Codigos_kits, Nombres_kits, Unidades_kits, Prestados_kits);
 	
-	while (op != 7)
+	while (terminar==false)
 	{
 		printf("\n----------------------------------------------\n");
-		printf("Elija que desea hacer:\n1-Cargar datos\n2-Ver prestamos y disponibilidad\n3-Ver disponibilidad de un kit\n4-Ver estadisticas\n5-Ver Ranking Utilizacion\n6-Actualizar Prestamos\n7-SALIR\n");
+		printf("Elija que desea hacer:\n1-Cargar datos\n2-Ver prestamos y disponibilidad\n3-Ver disponibilidad de un kit\n4-Ver estadisticas\n5-Ver Ranking Utilizacion\n6-Actualizar Prestamos\n7-SALIR (Ingrese 7 o cualquier otro valor) \n");
 
 		scanf("%d", &op);
 		
@@ -92,7 +94,9 @@ int main ()
 				
 				break;			
 				
-			case 7: //Salir del programa
+			default: //Salir del programa
+				
+				terminar = true;
 				
 				break;
 		
@@ -243,7 +247,7 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 			//Verificar si hay valores anteriores y guardar (o no)
 			if(Prestados_kits[i][j] == '\0')
 			{
-				Prestados_kits[i][j] = prestados_intermedio;;
+				Prestados_kits[i][j] = prestados_intermedio;
 			}
 			else if(Prestados_kits[i][j] != '\0')
 			{
@@ -272,10 +276,11 @@ void cargar_datos(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_k
 
 void ver_prestamos_disponibilidad(char Codigos_kits[][8], char Nombres_kits[][30],int Unidades_kits[], int Prestados_kits[][5])
 {
+	int num_kit;
 	
 	for(int i=0; i<10; i++)
 	{
-		int num_kit = i+1;
+		num_kit = i+1;
 		printf("\n--------------------KIT %d--------------------\n", num_kit);
 		printf("Nombre: %s    Codigo: %s \n\n",Nombres_kits[i], Codigos_kits[i]);
 		printf("Disponibilidad:\n\n");
@@ -455,27 +460,29 @@ void actualizar_prestamo(char Codigos_kits[][8], char Nombres_kits[][30],int Uni
 	{
 		printf("No se encontró un kit con ese codigo, asegurese de que sea correcto.\n");
 	}
-	
-	printf("Ingrese el día de la semana que quiere consultar:\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
-	scanf("%d", &dia);
-	while(dia!=1&&dia!=2&&dia!=3&&dia!=4&&dia!=5)
+	else
 	{
-		printf("ERROR: Ingrese un numero valido entre 1 y 5\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
+			
+		printf("Ingrese el día de la semana que quiere actualizar:\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
 		scanf("%d", &dia);
-	}
-	dia=dia-1;
+		while(dia!=1&&dia!=2&&dia!=3&&dia!=4&&dia!=5)
+		{
+			printf("ERROR: Ingrese un numero valido entre 1 y 5\n1-Lunes\n2-Martes\n3-Miercoles\n4-Jueves\n5-Viernes\n");
+			scanf("%d", &dia);
+		}
+		dia=dia-1;
 	
-	printf("\nPrestamos registrados: %d\n", Prestados_kits[ubicacion][dia]);
+		printf("\nPrestamos registrados: %d\n", Prestados_kits[ubicacion][dia]);
 	
-	printf("Ingrese el nuevo valor de unidades prestadas para el kit %s (%s) del dia %s: ", Codigos_kits[ubicacion], Nombres_kits[ubicacion], dias_semana[dia]);
-	scanf("%d", &Prestados_kits[ubicacion][dia]);
-	
-	while (Prestados_kits[ubicacion][dia]>Unidades_kits[ubicacion])
-	{
-		printf("ERROR: Ingrese una valor de unidades prestadas valida de entre 1 y %d: ", Unidades_kits[ubicacion]);
+		printf("Ingrese el nuevo valor de unidades prestadas para el kit %s (%s) del dia %s: ", Codigos_kits[ubicacion], Nombres_kits[ubicacion], dias_semana[dia]);
 		scanf("%d", &Prestados_kits[ubicacion][dia]);
+		
+		while (Prestados_kits[ubicacion][dia]>Unidades_kits[ubicacion])
+		{
+			printf("ERROR: Ingrese una valor de unidades prestadas valida de entre 1 y %d: ", Unidades_kits[ubicacion]);
+			scanf("%d", &Prestados_kits[ubicacion][dia]);
+		}
 	}
-	
 //	printf("\n-DEBUG: ubicacion= %d\n", ubicacion);printf("\n-DEBUG: dia= %d\n", dia);
 }
 	
